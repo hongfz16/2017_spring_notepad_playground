@@ -71,6 +71,8 @@ namespace CLRnotepad {
 	private: System::Windows::Forms::ToolStripMenuItem^  fontToolStripMenuItem;
 	private: System::Windows::Forms::FontDialog^  fontDialog1;
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
+	private: System::Windows::Forms::ColorDialog^  colorDialog1;
+	private: System::Windows::Forms::ToolStripMenuItem^  colorToolStripMenuItem;
 
 
 
@@ -103,68 +105,73 @@ namespace CLRnotepad {
 			this->folderBrowserDialog1 = (gcnew System::Windows::Forms::FolderBrowserDialog());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->colorDialog1 = (gcnew System::Windows::Forms::ColorDialog());
+			this->colorToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->tableLayoutPanel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menuStrip1
 			// 
+			this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->文件FToolStripMenuItem });
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(284, 25);
+			this->menuStrip1->Padding = System::Windows::Forms::Padding(8, 2, 0, 2);
+			this->menuStrip1->Size = System::Drawing::Size(379, 28);
 			this->menuStrip1->TabIndex = 0;
 			this->menuStrip1->Text = L"menuStrip1";
 			this->menuStrip1->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyWindow::menuStrip1_ItemClicked);
 			// 
 			// 文件FToolStripMenuItem
 			// 
-			this->文件FToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {
+			this->文件FToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(7) {
 				this->新建NToolStripMenuItem,
-					this->打开OToolStripMenuItem, this->保存SToolStripMenuItem, this->退出ToolStripMenuItem, this->testToolStripMenuItem, this->fontToolStripMenuItem
+					this->打开OToolStripMenuItem, this->保存SToolStripMenuItem, this->退出ToolStripMenuItem, this->testToolStripMenuItem, this->fontToolStripMenuItem,
+					this->colorToolStripMenuItem
 			});
 			this->文件FToolStripMenuItem->Name = L"文件FToolStripMenuItem";
-			this->文件FToolStripMenuItem->Size = System::Drawing::Size(58, 21);
+			this->文件FToolStripMenuItem->Size = System::Drawing::Size(69, 24);
 			this->文件FToolStripMenuItem->Text = L"文件(&F)";
 			// 
 			// 新建NToolStripMenuItem
 			// 
 			this->新建NToolStripMenuItem->Name = L"新建NToolStripMenuItem";
-			this->新建NToolStripMenuItem->Size = System::Drawing::Size(118, 22);
+			this->新建NToolStripMenuItem->Size = System::Drawing::Size(136, 26);
 			this->新建NToolStripMenuItem->Text = L"新建(&N)";
 			// 
 			// 打开OToolStripMenuItem
 			// 
 			this->打开OToolStripMenuItem->Name = L"打开OToolStripMenuItem";
-			this->打开OToolStripMenuItem->Size = System::Drawing::Size(118, 22);
+			this->打开OToolStripMenuItem->Size = System::Drawing::Size(136, 26);
 			this->打开OToolStripMenuItem->Text = L"打开(&O)";
 			this->打开OToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::打开OToolStripMenuItem_Click);
 			// 
 			// 保存SToolStripMenuItem
 			// 
 			this->保存SToolStripMenuItem->Name = L"保存SToolStripMenuItem";
-			this->保存SToolStripMenuItem->Size = System::Drawing::Size(118, 22);
+			this->保存SToolStripMenuItem->Size = System::Drawing::Size(136, 26);
 			this->保存SToolStripMenuItem->Text = L"保存(&S)";
 			this->保存SToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::保存SToolStripMenuItem_Click);
 			// 
 			// 退出ToolStripMenuItem
 			// 
 			this->退出ToolStripMenuItem->Name = L"退出ToolStripMenuItem";
-			this->退出ToolStripMenuItem->Size = System::Drawing::Size(118, 22);
+			this->退出ToolStripMenuItem->Size = System::Drawing::Size(136, 26);
 			this->退出ToolStripMenuItem->Text = L"退出(&Q)";
 			this->退出ToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::退出ToolStripMenuItem_Click);
 			// 
 			// testToolStripMenuItem
 			// 
 			this->testToolStripMenuItem->Name = L"testToolStripMenuItem";
-			this->testToolStripMenuItem->Size = System::Drawing::Size(118, 22);
-			this->testToolStripMenuItem->Text = L"test";
+			this->testToolStripMenuItem->Size = System::Drawing::Size(181, 26);
+			this->testToolStripMenuItem->Text = L"test(&T)";
 			this->testToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::testToolStripMenuItem_Click);
 			// 
 			// fontToolStripMenuItem
 			// 
 			this->fontToolStripMenuItem->Name = L"fontToolStripMenuItem";
-			this->fontToolStripMenuItem->Size = System::Drawing::Size(118, 22);
+			this->fontToolStripMenuItem->Size = System::Drawing::Size(136, 26);
 			this->fontToolStripMenuItem->Text = L"font";
 			this->fontToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::fontToolStripMenuItem_Click);
 			// 
@@ -178,11 +185,12 @@ namespace CLRnotepad {
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
 				50)));
 			this->tableLayoutPanel1->Controls->Add(this->richTextBox1, 0, 0);
-			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 28);
+			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 35);
+			this->tableLayoutPanel1->Margin = System::Windows::Forms::Padding(4);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 1;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(284, 233);
+			this->tableLayoutPanel1->Size = System::Drawing::Size(379, 291);
 			this->tableLayoutPanel1->TabIndex = 2;
 			// 
 			// richTextBox1
@@ -191,9 +199,10 @@ namespace CLRnotepad {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->richTextBox1->EnableAutoDragDrop = true;
-			this->richTextBox1->Location = System::Drawing::Point(3, 3);
+			this->richTextBox1->Location = System::Drawing::Point(4, 4);
+			this->richTextBox1->Margin = System::Windows::Forms::Padding(4);
 			this->richTextBox1->Name = L"richTextBox1";
-			this->richTextBox1->Size = System::Drawing::Size(278, 227);
+			this->richTextBox1->Size = System::Drawing::Size(371, 283);
 			this->richTextBox1->TabIndex = 0;
 			this->richTextBox1->Text = L"Default";
 			// 
@@ -201,14 +210,22 @@ namespace CLRnotepad {
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			// 
+			// colorToolStripMenuItem
+			// 
+			this->colorToolStripMenuItem->Name = L"colorToolStripMenuItem";
+			this->colorToolStripMenuItem->Size = System::Drawing::Size(181, 26);
+			this->colorToolStripMenuItem->Text = L"color";
+			this->colorToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::colorToolStripMenuItem_Click);
+			// 
 			// MyWindow
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(284, 262);
+			this->ClientSize = System::Drawing::Size(379, 328);
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"MyWindow";
 			this->Text = L"MyWindow";
 			this->menuStrip1->ResumeLayout(false);
@@ -273,7 +290,19 @@ private: System::Void testToolStripMenuItem_Click(System::Object^  sender, Syste
 
 }
 private: System::Void fontToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-	this->fontDialog1->ShowDialog();
+	//this->fontDialog1->ShowDialog();
+	if (fontDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+		//richTextBox1->ForeColor = fontDialog1->Color;
+		richTextBox1->SelectionFont = fontDialog1->Font;
+	}
+
+}
+private: System::Void colorToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	if (colorDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+		richTextBox1->SelectionColor = colorDialog1->Color;
+	}
 }
 };
 }
