@@ -223,7 +223,7 @@ namespace CLRnotepad {
 		/*richTextBox1->SaveFile("C:\\vs2015_project\\MyDocument.rtf",
 			RichTextBoxStreamType::RichText);*/
 		//StreamWriter^ myStream;
-		this->saveFileDialog1->Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+		this->saveFileDialog1->Filter = "txt files (*.txt)|*.txt |rtf files (*.rtf)|*.rtf|All files (*.*)|*.*";
 		this->saveFileDialog1->FilterIndex = 2;
 		this->saveFileDialog1->RestoreDirectory = true;
 		if (this->saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
