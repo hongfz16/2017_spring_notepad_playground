@@ -214,7 +214,8 @@ namespace CLRnotepad {
 	private: System::Windows::Forms::ColorDialog^  colorDialog1;
 	private: System::Windows::Forms::ToolStripMenuItem^  colorToolStripMenuItem;
 private: System::Windows::Forms::ToolStripMenuItem^  wtfToolStripMenuItem;
-private: System::Windows::Forms::ToolStripMenuItem^  letterSpacingToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  paddingToolStripMenuItem;
+
 
 
 
@@ -250,7 +251,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  letterSpacingToolStripMenuI
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->colorDialog1 = (gcnew System::Windows::Forms::ColorDialog());
-			this->letterSpacingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->paddingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->tableLayoutPanel1->SuspendLayout();
 			this->SuspendLayout();
@@ -272,7 +273,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  letterSpacingToolStripMenuI
 			this->文件FToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(9) {
 				this->新建NToolStripMenuItem,
 					this->打开OToolStripMenuItem, this->保存SToolStripMenuItem, this->退出ToolStripMenuItem, this->testToolStripMenuItem, this->fontToolStripMenuItem,
-					this->colorToolStripMenuItem, this->wtfToolStripMenuItem, this->letterSpacingToolStripMenuItem
+					this->colorToolStripMenuItem, this->wtfToolStripMenuItem, this->paddingToolStripMenuItem
 			});
 			this->文件FToolStripMenuItem->Name = L"文件FToolStripMenuItem";
 			this->文件FToolStripMenuItem->Size = System::Drawing::Size(69, 24);
@@ -346,7 +347,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  letterSpacingToolStripMenuI
 				50)));
 			this->tableLayoutPanel1->Controls->Add(this->richTextBox1, 0, 0);
 			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 35);
-			this->tableLayoutPanel1->Margin = System::Windows::Forms::Padding(4);
+			this->tableLayoutPanel1->Margin = System::Windows::Forms::Padding(40);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 1;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
@@ -370,12 +371,12 @@ private: System::Windows::Forms::ToolStripMenuItem^  letterSpacingToolStripMenuI
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			// 
-			// letterSpacingToolStripMenuItem
+			// paddingToolStripMenuItem
 			// 
-			this->letterSpacingToolStripMenuItem->Name = L"letterSpacingToolStripMenuItem";
-			this->letterSpacingToolStripMenuItem->Size = System::Drawing::Size(184, 26);
-			this->letterSpacingToolStripMenuItem->Text = L"letter spacing";
-			this->letterSpacingToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::letterSpacingToolStripMenuItem_Click);
+			this->paddingToolStripMenuItem->Name = L"paddingToolStripMenuItem";
+			this->paddingToolStripMenuItem->Size = System::Drawing::Size(181, 26);
+			this->paddingToolStripMenuItem->Text = L"padding";
+			this->paddingToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::paddingToolStripMenuItem_Click);
 			// 
 			// MyWindow
 			// 
@@ -477,6 +478,11 @@ private: System::Void letterSpacingToolStripMenuItem_Click(System::Object^  send
 	//richTextBox1->//sSpacing = 1;
 	//richTextBox1->pa
 	//Message
+	//richTextBox1->SelectionFont->
+
+}
+private: System::Void paddingToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->richTextBox1->Margin = System::Windows::Forms::Padding(40,4,40,4);
 }
 };
 }
