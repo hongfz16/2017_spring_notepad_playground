@@ -10,12 +10,147 @@ namespace CLRnotepad {
 	using namespace System::Drawing;
 	using namespace System::IO;
 	using namespace System::Text;
+	using namespace System::Runtime::InteropServices;
+	//	using namespace System::Object;
 
 	/// <summary>
 	/// MyWindow 摘要
 	/// </summary>
+
+
+/*
+	const int WM_USER = 0x0400;
+	const int EM_GETPARAFORMAT = WM_USER + 61;
+	const int EM_SETPARAFORMAT = WM_USER + 71;
+	const long MAX_TAB_STOPS = 32;
+	const unsigned int PFM_LINESPACING = 0x00000100;
+	
+	[StructLayout(LayoutKind::Sequential)]
+	ref struct PARAFORMAT2
+	{
+		int cbSize;
+		unsigned int dwMask;
+		//DWORD dwMask;
+		short wNumbering;
+		short wReserved;
+		int dxStartIndent;
+		int dxRightIndent;
+		int dxOffset;
+		short wAlignment;
+		short cTabCount;
+		[MarshalAs(UnmanagedType::ByValArray, SizeConst = 32)]
+		int* rgxTabs;
+		int dySpaceBefore;
+		int dySpaceAfter;
+		int dyLineSpacing;
+		short sStyle;
+		Byte bLineSpacingRule;
+		Byte bOutlineLevel;
+		short wShadingWeight;
+		short wShadingStyle;
+		short wNumberingStart;
+		short wNumberingStyle;
+		short wNumberingTab;
+		short wBorderSpace;
+		short wBorderWidth;
+		short wBorders;
+	};
+
+	[DllImport("user32", CharSet = CharSet::Auto)]
+	//[DllImport("user32.dll", CallingConvention = CallingConvention::StdCall)];
+	static IntPtr SendMessage(HandleRef^ hWnd, int msg, int wParam, PARAFORMAT2^ lParam);
+
+	/// <summary>
+	/// 设置行距
+	/// </summary>
+	/// <param name="ctl">控件</param>
+	/// <param name="dyLineSpacing">间距</param>
+	static void SetLineSpace(Control^ ctl, int dyLineSpacing)
+	{
+		PARAFORMAT2^ fmt = gcnew PARAFORMAT2();
+		fmt->cbSize = System::Runtime::InteropServices::Marshal::SizeOf(fmt);
+		fmt->bLineSpacingRule = 4;// bLineSpacingRule;
+		fmt->dyLineSpacing = dyLineSpacing;
+		fmt->dwMask = PFM_LINESPACING;
+	//	try
+	//	{
+		SendMessage(gcnew HandleRef(ctl, ctl->Handle), EM_SETPARAFORMAT, 0, fmt);
+	//	}
+	//	catch
+	//	{
+
+	//	}
+		
+	};
+*/
 	public ref class MyWindow : public System::Windows::Forms::Form
 	{
+/*
+	public:
+		const int WM_USER = 0x0400;
+		const int EM_GETPARAFORMAT = WM_USER + 61;
+		const int EM_SETPARAFORMAT = WM_USER + 71;
+		const long MAX_TAB_STOPS = 32;
+		const unsigned int PFM_LINESPACING = 0x00000100;
+		//	[StructLayout(LayoutKind::Sequential)]
+		ref struct PARAFORMAT2
+		{
+			int cbSize;
+			unsigned int dwMask;
+			//DWORD dwMask;
+			short wNumbering;
+			short wReserved;
+			int dxStartIndent;
+			int dxRightIndent;
+			int dxOffset;
+			short wAlignment;
+			short cTabCount;
+			[MarshalAs(UnmanagedType::ByValArray, SizeConst = 32)]
+			int* rgxTabs;
+			int dySpaceBefore;
+			int dySpaceAfter;
+			int dyLineSpacing;
+			short sStyle;
+			Byte bLineSpacingRule;
+			Byte bOutlineLevel;
+			short wShadingWeight;
+			short wShadingStyle;
+			short wNumberingStart;
+			short wNumberingStyle;
+			short wNumberingTab;
+			short wBorderSpace;
+			short wBorderWidth;
+			short wBorders;
+		};
+
+		[DllImport("user32.dll", CharSet = CharSet::Auto)]
+		//[DllImport("user32.dll", CallingConvention = CallingConvention::StdCall)];
+		//	static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref PARAFORMAT2 lParam);
+
+		/// <summary>
+		/// 设置行距
+		/// </summary>
+		/// <param name="ctl">控件</param>
+		/// <param name="dyLineSpacing">间距</param>
+		static void SetLineSpace(Control^ ctl, int dyLineSpacing)
+		{
+			PARAFORMAT2* fmt = new PARAFORMAT2();
+			fmt->cbSize = 100000;//System::Runtime::InteropServices::Marshal::SizeOf(fmt);
+			fmt->bLineSpacingRule = 4;// bLineSpacingRule;
+			fmt->dyLineSpacing = dyLineSpacing;
+			fmt->dwMask = PFM_LINESPACING;
+			/*
+			try
+			{
+			//SendMessage(new HandleRef(ctl, ctl.Handle), EM_SETPARAFORMAT, 0, ref fmt);
+			}
+			catch
+			{
+
+			}
+			
+		}
+*/
 	public:
 		MyWindow(void)
 		{
@@ -73,6 +208,8 @@ namespace CLRnotepad {
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
 	private: System::Windows::Forms::ColorDialog^  colorDialog1;
 	private: System::Windows::Forms::ToolStripMenuItem^  colorToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  wtfToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  letterSpacingToolStripMenuItem;
 
 
 
@@ -99,6 +236,8 @@ namespace CLRnotepad {
 			this->退出ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->testToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->fontToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->colorToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->wtfToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
 			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
@@ -106,7 +245,7 @@ namespace CLRnotepad {
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->colorDialog1 = (gcnew System::Windows::Forms::ColorDialog());
-			this->colorToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->letterSpacingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->tableLayoutPanel1->SuspendLayout();
 			this->SuspendLayout();
@@ -125,39 +264,41 @@ namespace CLRnotepad {
 			// 
 			// 文件FToolStripMenuItem
 			// 
-			this->文件FToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(7) {
+			this->文件FToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(9) {
 				this->新建NToolStripMenuItem,
 					this->打开OToolStripMenuItem, this->保存SToolStripMenuItem, this->退出ToolStripMenuItem, this->testToolStripMenuItem, this->fontToolStripMenuItem,
-					this->colorToolStripMenuItem
+					this->colorToolStripMenuItem, this->wtfToolStripMenuItem, this->letterSpacingToolStripMenuItem
 			});
 			this->文件FToolStripMenuItem->Name = L"文件FToolStripMenuItem";
 			this->文件FToolStripMenuItem->Size = System::Drawing::Size(69, 24);
 			this->文件FToolStripMenuItem->Text = L"文件(&F)";
+			this->文件FToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::文件FToolStripMenuItem_Click);
 			// 
 			// 新建NToolStripMenuItem
 			// 
 			this->新建NToolStripMenuItem->Name = L"新建NToolStripMenuItem";
-			this->新建NToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->新建NToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->新建NToolStripMenuItem->Text = L"新建(&N)";
+			this->新建NToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::新建NToolStripMenuItem_Click);
 			// 
 			// 打开OToolStripMenuItem
 			// 
 			this->打开OToolStripMenuItem->Name = L"打开OToolStripMenuItem";
-			this->打开OToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->打开OToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->打开OToolStripMenuItem->Text = L"打开(&O)";
 			this->打开OToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::打开OToolStripMenuItem_Click);
 			// 
 			// 保存SToolStripMenuItem
 			// 
 			this->保存SToolStripMenuItem->Name = L"保存SToolStripMenuItem";
-			this->保存SToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->保存SToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->保存SToolStripMenuItem->Text = L"保存(&S)";
 			this->保存SToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::保存SToolStripMenuItem_Click);
 			// 
 			// 退出ToolStripMenuItem
 			// 
 			this->退出ToolStripMenuItem->Name = L"退出ToolStripMenuItem";
-			this->退出ToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->退出ToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->退出ToolStripMenuItem->Text = L"退出(&Q)";
 			this->退出ToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::退出ToolStripMenuItem_Click);
 			// 
@@ -171,9 +312,23 @@ namespace CLRnotepad {
 			// fontToolStripMenuItem
 			// 
 			this->fontToolStripMenuItem->Name = L"fontToolStripMenuItem";
-			this->fontToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->fontToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->fontToolStripMenuItem->Text = L"font";
 			this->fontToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::fontToolStripMenuItem_Click);
+			// 
+			// colorToolStripMenuItem
+			// 
+			this->colorToolStripMenuItem->Name = L"colorToolStripMenuItem";
+			this->colorToolStripMenuItem->Size = System::Drawing::Size(181, 26);
+			this->colorToolStripMenuItem->Text = L"color";
+			this->colorToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::colorToolStripMenuItem_Click);
+			// 
+			// wtfToolStripMenuItem
+			// 
+			this->wtfToolStripMenuItem->Name = L"wtfToolStripMenuItem";
+			this->wtfToolStripMenuItem->Size = System::Drawing::Size(181, 26);
+			this->wtfToolStripMenuItem->Text = L"wtf";
+			this->wtfToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::wtfToolStripMenuItem_Click);
 			// 
 			// tableLayoutPanel1
 			// 
@@ -210,12 +365,12 @@ namespace CLRnotepad {
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			// 
-			// colorToolStripMenuItem
+			// letterSpacingToolStripMenuItem
 			// 
-			this->colorToolStripMenuItem->Name = L"colorToolStripMenuItem";
-			this->colorToolStripMenuItem->Size = System::Drawing::Size(181, 26);
-			this->colorToolStripMenuItem->Text = L"color";
-			this->colorToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::colorToolStripMenuItem_Click);
+			this->letterSpacingToolStripMenuItem->Name = L"letterSpacingToolStripMenuItem";
+			this->letterSpacingToolStripMenuItem->Size = System::Drawing::Size(184, 26);
+			this->letterSpacingToolStripMenuItem->Text = L"letter spacing";
+			this->letterSpacingToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::letterSpacingToolStripMenuItem_Click);
 			// 
 			// MyWindow
 			// 
@@ -264,7 +419,7 @@ namespace CLRnotepad {
 		openFileDialog1->FilterIndex = 2;
 		openFileDialog1->RestoreDirectory = true;
 
-		unsigned char s[100];
+//		unsigned char s[100];
 
 		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
@@ -303,6 +458,16 @@ private: System::Void colorToolStripMenuItem_Click(System::Object^  sender, Syst
 	{
 		richTextBox1->SelectionColor = colorDialog1->Color;
 	}
+}
+private: System::Void 新建NToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+}
+private: System::Void wtfToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	richTextBox1->SelectionCharOffset = -1 * 10;//(Convert::ToInt32(R223.Txt_Space_Before.Text) * 100);
+//	richTextBox1->LineHeight = 100;
+}
+private: System::Void 文件FToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+}
+private: System::Void letterSpacingToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 }
 };
 }
