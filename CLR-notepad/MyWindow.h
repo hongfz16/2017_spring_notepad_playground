@@ -1,5 +1,10 @@
 #pragma once
 
+#include<cstring>
+#include<iostream>
+#include<cstdlib>
+#include<cstdio>
+
 namespace CLRnotepad {
 
 	using namespace System;
@@ -468,6 +473,10 @@ private: System::Void wtfToolStripMenuItem_Click(System::Object^  sender, System
 private: System::Void ÎÄ¼þFToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 }
 private: System::Void letterSpacingToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	
+	//richTextBox1->//sSpacing = 1;
+	//richTextBox1->pa
+	//Message
 }
 };
 }
