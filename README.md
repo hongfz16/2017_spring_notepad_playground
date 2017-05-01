@@ -1,8 +1,10 @@
 # 2017_spring_notepad_playground
 
 
-设置字体字号颜色
+*设置字体字号颜色*(done)
 	fontbrowser与richtextbox的交互
+
+*快捷字体字号颜色设置栏*
 
 richtextbox的选中
 
@@ -16,3 +18,8 @@ richtextbox的选中
 
 显示行数
 
+设置行距(done)
+
+*设置字符间距*
+
+设置padding(done)
