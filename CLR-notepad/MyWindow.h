@@ -75,6 +75,7 @@ namespace CLRnotepad {
 	private: System::Windows::Forms::ToolStripMenuItem^  colorToolStripMenuItem;
 	private: System::Windows::Forms::Panel^  panel1;
 	private: System::Windows::Forms::RichTextBox^  richTextBox1;
+	private: System::Windows::Forms::ToolStripMenuItem^  lingspacingToolStripMenuItem;
 
 
 
@@ -110,6 +111,7 @@ namespace CLRnotepad {
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->colorDialog1 = (gcnew System::Windows::Forms::ColorDialog());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->lingspacingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->tableLayoutPanel1->SuspendLayout();
 			this->SuspendLayout();
@@ -128,10 +130,10 @@ namespace CLRnotepad {
 			// 
 			// 文件FToolStripMenuItem
 			// 
-			this->文件FToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(7) {
+			this->文件FToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(8) {
 				this->新建NToolStripMenuItem,
 					this->打开OToolStripMenuItem, this->保存SToolStripMenuItem, this->退出ToolStripMenuItem, this->testToolStripMenuItem, this->fontToolStripMenuItem,
-					this->colorToolStripMenuItem
+					this->colorToolStripMenuItem, this->lingspacingToolStripMenuItem
 			});
 			this->文件FToolStripMenuItem->Name = L"文件FToolStripMenuItem";
 			this->文件FToolStripMenuItem->Size = System::Drawing::Size(69, 24);
@@ -140,48 +142,48 @@ namespace CLRnotepad {
 			// 新建NToolStripMenuItem
 			// 
 			this->新建NToolStripMenuItem->Name = L"新建NToolStripMenuItem";
-			this->新建NToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->新建NToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->新建NToolStripMenuItem->Text = L"新建(&N)";
 			// 
 			// 打开OToolStripMenuItem
 			// 
 			this->打开OToolStripMenuItem->Name = L"打开OToolStripMenuItem";
-			this->打开OToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->打开OToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->打开OToolStripMenuItem->Text = L"打开(&O)";
 			this->打开OToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::打开OToolStripMenuItem_Click);
 			// 
 			// 保存SToolStripMenuItem
 			// 
 			this->保存SToolStripMenuItem->Name = L"保存SToolStripMenuItem";
-			this->保存SToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->保存SToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->保存SToolStripMenuItem->Text = L"保存(&S)";
 			this->保存SToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::保存SToolStripMenuItem_Click);
 			// 
 			// 退出ToolStripMenuItem
 			// 
 			this->退出ToolStripMenuItem->Name = L"退出ToolStripMenuItem";
-			this->退出ToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->退出ToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->退出ToolStripMenuItem->Text = L"退出(&Q)";
 			this->退出ToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::退出ToolStripMenuItem_Click);
 			// 
 			// testToolStripMenuItem
 			// 
 			this->testToolStripMenuItem->Name = L"testToolStripMenuItem";
-			this->testToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->testToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->testToolStripMenuItem->Text = L"test(&T)";
 			this->testToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::testToolStripMenuItem_Click);
 			// 
 			// fontToolStripMenuItem
 			// 
 			this->fontToolStripMenuItem->Name = L"fontToolStripMenuItem";
-			this->fontToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->fontToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->fontToolStripMenuItem->Text = L"font";
 			this->fontToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::fontToolStripMenuItem_Click);
 			// 
 			// colorToolStripMenuItem
 			// 
 			this->colorToolStripMenuItem->Name = L"colorToolStripMenuItem";
-			this->colorToolStripMenuItem->Size = System::Drawing::Size(136, 26);
+			this->colorToolStripMenuItem->Size = System::Drawing::Size(181, 26);
 			this->colorToolStripMenuItem->Text = L"color";
 			this->colorToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::colorToolStripMenuItem_Click);
 			// 
@@ -229,6 +231,13 @@ namespace CLRnotepad {
 			this->panel1->Size = System::Drawing::Size(48, 692);
 			this->panel1->TabIndex = 3;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyWindow::panel1_Paint);
+			// 
+			// lingspacingToolStripMenuItem
+			// 
+			this->lingspacingToolStripMenuItem->Name = L"lingspacingToolStripMenuItem";
+			this->lingspacingToolStripMenuItem->Size = System::Drawing::Size(181, 26);
+			this->lingspacingToolStripMenuItem->Text = L"lingspacing";
+			this->lingspacingToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyWindow::lingspacingToolStripMenuItem_Click);
 			// 
 			// MyWindow
 			// 
@@ -415,5 +424,8 @@ private: System::Void OnTextChanged(System::TextChangedEventArgs^ e)
 
 }
 */
+private: System::Void lingspacingToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	richTextBox1->SelectionCharOffset = -1 * 50;//(Convert::ToInt32(R223.Txt_Space_Before.Text) * 100);
+}
 };
 }
