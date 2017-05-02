@@ -25,13 +25,14 @@ namespace CLRnotepad {
 
 
 	const int WM_USER = 0x0400;
+	const int SCF_SELECTION = 1;
 	const int EM_GETPARAFORMAT = WM_USER + 61;
 	const int EM_SETPARAFORMAT = WM_USER + 71;
 	const long MAX_TAB_STOPS = 32;
 	const unsigned int PFM_LINESPACING = 0x00000100;
 	
-	[StructLayout(LayoutKind::Sequential)]
-	ref struct PARAFORMAT2
+	//[StructLayout(LayoutKind::Sequential)]
+	/*ref*/ struct PARAFORMAT2
 	{
 		int cbSize;
 		unsigned int dwMask;
@@ -61,25 +62,27 @@ namespace CLRnotepad {
 		short wBorders;
 	};
 
-	[DllImport("user32", CharSet = CharSet::Auto)]
+//	[DllImport("user32", CharSet = CharSet::Auto)]
+	//[DllImport("user32.dll", EntryPoint = "SendMessage", CharSet = CharSet::Auto)]
 	//[DllImport("user32.dll", CallingConvention = CallingConvention::StdCall)];
-	static IntPtr SendMessage(HandleRef^ hWnd, int msg, int wParam, PARAFORMAT2^ lParam);
+	//static IntPtr SendMessage(HandleRef^ hWnd, int msg, int wParam, PARAFORMAT2^ lParam);
 
 	/// <summary>
 	/// 设置行距
 	/// </summary>
 	/// <param name="ctl">控件</param>
 	/// <param name="dyLineSpacing">间距</param>
-	static void SetLineSpace(Control^ ctl, int dyLineSpacing)
+	static void SetLineSpace(RichTextBox^ ctl, int dyLineSpacing)
 	{
-		PARAFORMAT2^ fmt = gcnew PARAFORMAT2();
-		fmt->cbSize = System::Runtime::InteropServices::Marshal::SizeOf(fmt);
+		PARAFORMAT2* fmt = new PARAFORMAT2();
+		fmt->cbSize = 100;//System::Runtime::InteropServices::Marshal::SizeOf(fmt);
 		fmt->bLineSpacingRule = 4;// bLineSpacingRule;
 		fmt->dyLineSpacing = dyLineSpacing;
 		fmt->dwMask = PFM_LINESPACING;
 	//	try
 	//	{
-		Message::Create(gcnew HandleRef(ctl, ctl->Handle), EM_SETPARAFORMAT, 0, fmt);
+		Message::Create(ctl->Handle, EM_SETPARAFORMAT, IntPtr(1), IntPtr(fmt));
+		//ctl->hand
 	//	}
 	//	catch
 	//	{
@@ -468,8 +471,9 @@ private: System::Void colorToolStripMenuItem_Click(System::Object^  sender, Syst
 private: System::Void 新建NToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 }
 private: System::Void wtfToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-	richTextBox1->SelectionCharOffset = -1 * 10;//(Convert::ToInt32(R223.Txt_Space_Before.Text) * 100);
-//	richTextBox1->LineHeight = 100;
+	//richTextBox1->SelectionCharOffset = -1 * 10;//(Convert::ToInt32(R223.Txt_Space_Before.Text) * 100);
+	SetLineSpace(richTextBox1, 40);
+	//	richTextBox1->LineHeight = 100;
 }
 private: System::Void 文件FToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 }
