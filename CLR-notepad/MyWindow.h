@@ -23,7 +23,7 @@ namespace CLRnotepad {
 	/// </summary>
 
 
-/*
+
 	const int WM_USER = 0x0400;
 	const int EM_GETPARAFORMAT = WM_USER + 61;
 	const int EM_SETPARAFORMAT = WM_USER + 71;
@@ -79,7 +79,7 @@ namespace CLRnotepad {
 		fmt->dwMask = PFM_LINESPACING;
 	//	try
 	//	{
-		SendMessage(gcnew HandleRef(ctl, ctl->Handle), EM_SETPARAFORMAT, 0, fmt);
+		Message::Create(gcnew HandleRef(ctl, ctl->Handle), EM_SETPARAFORMAT, 0, fmt);
 	//	}
 	//	catch
 	//	{
@@ -87,7 +87,7 @@ namespace CLRnotepad {
 	//	}
 		
 	};
-*/
+
 	public ref class MyWindow : public System::Windows::Forms::Form
 	{
 /*
