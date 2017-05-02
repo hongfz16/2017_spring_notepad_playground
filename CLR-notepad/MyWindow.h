@@ -4,6 +4,7 @@
 #include<iostream>
 #include<cstdlib>
 #include<cstdio>
+#include<Windows.h>
 
 namespace CLRnotepad {
 
@@ -23,45 +24,183 @@ namespace CLRnotepad {
 	/// </summary>
 
 
-
+/*
 	const int WM_USER = 0x0400;
 	const int SCF_SELECTION = 1;
 	const int EM_GETPARAFORMAT = WM_USER + 61;
 	const int EM_SETPARAFORMAT = WM_USER + 71;
 	const long MAX_TAB_STOPS = 32;
+*/	
+//	typedef unsigned int UInt32
 	const unsigned int PFM_LINESPACING = 0x00000100;
-	
-	//[StructLayout(LayoutKind::Sequential)]
-	/*ref*/ struct PARAFORMAT2
-	{
-		int cbSize;
-		unsigned int dwMask;
-		//DWORD dwMask;
-		short wNumbering;
-		short wReserved;
-		int dxStartIndent;
-		int dxRightIndent;
-		int dxOffset;
-		short wAlignment;
-		short cTabCount;
-		[MarshalAs(UnmanagedType::ByValArray, SizeConst = 32)]
-		int* rgxTabs;
-		int dySpaceBefore;
-		int dySpaceAfter;
-		int dyLineSpacing;
-		short sStyle;
-		Byte bLineSpacingRule;
-		Byte bOutlineLevel;
-		short wShadingWeight;
-		short wShadingStyle;
-		short wNumberingStart;
-		short wNumberingStyle;
-		short wNumberingTab;
-		short wBorderSpace;
-		short wBorderWidth;
-		short wBorders;
-	};
+	const UInt32 SIWM_USER = 0x0400;
+	const UInt32 EM_GETCHARFORMAT = (SIWM_USER + 58);
+	const UInt32 EM_SETCHARFORMAT = (SIWM_USER + 68);
+	const UInt32 SCF_ALL = 0x0004;
+	const UInt32 SCF_SELECTION = 0x0001;
 
+	typedef unsigned int UINT;
+	typedef unsigned long DWORD;
+	typedef unsigned short WORD;
+	typedef long LONG;
+	typedef short SHORT;
+	typedef unsigned char BYTE;
+	typedef DWORD COLORREF;
+	typedef DWORD LCID;
+	typedef wchar_t WCHAR;
+	#ifdef UNICODE
+		typedef WCHAR TCHAR;
+	#else
+		typedef char TCHAR;
+	#endif
+
+	typedef struct _paraformat {
+		UINT  cbSize;
+		DWORD dwMask;
+		WORD  wNumbering;
+		WORD  wEffects;
+		LONG  dxStartIndent;
+		LONG  dxRightIndent;
+		LONG  dxOffset;
+		WORD  wAlignment;
+		SHORT cTabCount;
+		LONG  rgxTabs;
+		LONG  dySpaceBefore;
+		LONG  dySpaceAfter;
+		LONG  dyLineSpacing;
+		SHORT sStyle;
+		BYTE  bLineSpacingRule;
+		BYTE  bOutlineLevel;
+		WORD  wShadingWeight;
+		WORD  wShadingStyle;
+		WORD  wNumberingStart;
+		WORD  wNumberingStyle;
+		WORD  wNumberingTab;
+		WORD  wBorderSpace;
+		WORD  wBorderWidth;
+		WORD  wBorders;
+	} PARAFORMAT2;
+
+//	const int LF_FACESIZE = 10;
+
+	typedef struct _charformat2 {
+		UINT     cbSize;
+		DWORD    dwMask;
+		DWORD    dwEffects;
+		LONG     yHeight;
+		LONG     yOffset;
+		COLORREF crTextColor;
+		BYTE     bCharSet;
+		BYTE     bPitchAndFamily;
+		TCHAR    szFaceName[LF_FACESIZE];
+		WORD     wWeight;
+		SHORT    sSpacing;
+		COLORREF crBackColor;
+		LCID     lcid;
+#if (_RICHEDIT_VER >= 0x0500)
+		union {
+			DWORD dwReserved;
+			DWORD dwCookie;
+		};
+#else 
+		DWORD    dwReserved;
+#endif 
+		SHORT    sStyle;
+		WORD     wKerning;
+		BYTE     bUnderlineType;
+		BYTE     bAnimation;
+		BYTE     bRevAuthor;
+#if (_RICHEDIT_VER >= 0x0800)
+		BYTE     bUnderlineColor;
+#endif 
+	} CHARFORMAT2;
+
+
+	// CHARFORMAT masks -------------------------------------
+	const UInt32 CFM_BOLD = 0x00000001;
+	const UInt32 CFM_ITALIC = 0x00000002;
+	const UInt32 CFM_UNDERLINE = 0x00000004;
+	const UInt32 CFM_STRIKEOUT = 0x00000008;
+	const UInt32 CFM_PROTECTED = 0x00000010;
+	const UInt32 CFM_LINK = 0x00000020;         // Exchange hyperlink extension 
+	const UInt32 CFM_SIZE = 0x80000000;
+	const UInt32 CFM_COLOR = 0x40000000;
+	const UInt32 CFM_FACE = 0x20000000;
+	const UInt32 CFM_OFFSET = 0x10000000;
+	const UInt32 CFM_CHARSET = 0x08000000;
+
+	const UInt32 CFM_SMALLCAPS = 0x0040;            // (*)  
+	const UInt32 CFM_ALLCAPS = 0x0080;          // Displayed by 3.0 
+	const UInt32 CFM_HIDDEN = 0x0100;           // Hidden by 3.0 
+	const UInt32 CFM_OUTLINE = 0x0200;          // (*)  
+	const UInt32 CFM_SHADOW = 0x0400;           // (*)  
+	const UInt32 CFM_EMBOSS = 0x0800;           // (*)  
+	const UInt32 CFM_IMPRINT = 0x1000;          // (*)  
+	const UInt32 CFM_DISABLED = 0x2000;
+	const UInt32 CFM_REVISED = 0x4000;
+
+	const UInt32 CFM_BACKCOLOR = 0x04000000;
+	const UInt32 CFM_LCID = 0x02000000;
+	const UInt32 CFM_UNDERLINETYPE = 0x00800000;        // Many displayed by 3.0 
+	const UInt32 CFM_WEIGHT = 0x00400000;
+	const UInt32 CFM_SPACING = 0x00200000;      // Displayed by 3.0 
+	const UInt32 CFM_KERNING = 0x00100000;      // (*)  
+	const UInt32 CFM_STYLE = 0x00080000;        // (*)  
+	const UInt32 CFM_ANIMATION = 0x00040000;        // (*)  
+	const UInt32 CFM_REVAUTHOR = 0x00008000;
+
+	const UInt32 CFE_SUBSCRIPT = 0x00010000;        // Superscript and subscript are 
+	const UInt32 CFE_SUPERSCRIPT = 0x00020000;      //  mutually exclusive           
+
+	const UInt32 CFM_SUBSCRIPT = (CFE_SUBSCRIPT | CFE_SUPERSCRIPT);
+	const UInt32 CFM_SUPERSCRIPT = CFM_SUBSCRIPT;
+
+	// CHARFORMAT "ALL" masks
+/*
+	const UInt32 CFM_EFFECTS = (CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE | CFM_COLOR |
+		CFM_STRIKEOUT | CFE_PROTECTED | CFM_LINK);
+	const UInt32 CFM_ALL = (CFM_EFFECTS | CFM_SIZE | CFM_FACE | CFM_OFFSET | CFM_CHARSET);
+
+	const UInt32 CFM_EFFECTS2 = (CFM_EFFECTS | CFM_DISABLED | CFM_SMALLCAPS | CFM_ALLCAPS
+		| CFM_HIDDEN | CFM_OUTLINE | CFM_SHADOW | CFM_EMBOSS
+		| CFM_IMPRINT | CFM_DISABLED | CFM_REVISED
+		| CFM_SUBSCRIPT | CFM_SUPERSCRIPT | CFM_BACKCOLOR);
+*/
+/*
+	const UInt32 CFM_ALL2 = (CFM_ALL | CFM_EFFECTS2 | CFM_BACKCOLOR | CFM_LCID
+		| CFM_UNDERLINETYPE | CFM_WEIGHT | CFM_REVAUTHOR
+		| CFM_SPACING | CFM_KERNING | CFM_STYLE | CFM_ANIMATION);
+*/
+	//------------------------------------------------------------
+
+
+	//CHAR EFFECTS-----------------------------------------------
+	const UInt32 CFE_BOLD = 0x0001;
+	const UInt32 CFE_ITALIC = 0x0002;
+	const UInt32 CFE_UNDERLINE = 0x0004;
+	const UInt32 CFE_STRIKEOUT = 0x0008;
+	const UInt32 CFE_PROTECTED = 0x0010;
+	const UInt32 CFE_LINK = 0x0020;
+	const UInt32 CFE_AUTOCOLOR = 0x40000000;            // NOTE: this corresponds to 
+														// CFM_COLOR, which controls it 
+														// Masks and effects defined for CHARFORMAT2 -- an (*) indicates
+														// that the data is stored by RichEdit 2.0/3.0, but not displayed
+	const UInt32 CFE_SMALLCAPS = CFM_SMALLCAPS;
+	const UInt32 CFE_ALLCAPS = CFM_ALLCAPS;
+	const UInt32 CFE_HIDDEN = CFM_HIDDEN;
+	const UInt32 CFE_OUTLINE = CFM_OUTLINE;
+	const UInt32 CFE_SHADOW = CFM_SHADOW;
+	const UInt32 CFE_EMBOSS = CFM_EMBOSS;
+	const UInt32 CFE_IMPRINT = CFM_IMPRINT;
+	const UInt32 CFE_DISABLED = CFM_DISABLED;
+	const UInt32 CFE_REVISED = CFM_REVISED;
+
+	// CFE_AUTOCOLOR and CFE_AUTOBACKCOLOR correspond to CFM_COLOR and
+	// CFM_BACKCOLOR, respectively, which control them
+	const UInt32 CFE_AUTOBACKCOLOR = CFM_BACKCOLOR;
+	//-------------------------------------------------------
+
+	
 //	[DllImport("user32", CharSet = CharSet::Auto)]
 	//[DllImport("user32.dll", EntryPoint = "SendMessage", CharSet = CharSet::Auto)]
 	//[DllImport("user32.dll", CallingConvention = CallingConvention::StdCall)];
@@ -72,16 +211,35 @@ namespace CLRnotepad {
 	/// </summary>
 	/// <param name="ctl">控件</param>
 	/// <param name="dyLineSpacing">间距</param>
+
+	[DllImport("user32.dll", CharSet = CharSet::Auto)]
+	//[DllImport("user32.dll", CallingConvention = CallingConvention::StdCall)];
+	extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam,CHARFORMAT2* lParam);
+
+
+	void Kerning(RichTextBox^ ctl,int kerning)
+	{
+		CHARFORMAT2* fmt = new CHARFORMAT2();
+		fmt->cbSize = sizeof(CHARFORMAT2);
+		fmt->sSpacing = kerning;
+		fmt->wKerning = kerning;
+		//fmt->dwMask = CFM_SPACING;
+		fmt->dwMask = CFM_SPACING | CFM_KERNING | CFM_BOLD | CFM_ITALIC;
+		fmt->dwEffects = ~0;//CFE_BOLD;
+		//Message::Create(ctl->Handle, EM_SETCHARFORMAT ,IntPtr((int)SCF_SELECTION),IntPtr(fmt));
+		SendMessage(ctl->Handle, EM_SETCHARFORMAT, SCF_SELECTION, fmt);
+	}
+/*
 	static void SetLineSpace(RichTextBox^ ctl, int dyLineSpacing)
 	{
 		PARAFORMAT2* fmt = new PARAFORMAT2();
-		fmt->cbSize = 100;//System::Runtime::InteropServices::Marshal::SizeOf(fmt);
+		fmt->cbSize = sizeof(PARAFORMAT2);//System::Runtime::InteropServices::Marshal::SizeOf(fmt);
 		fmt->bLineSpacingRule = 4;// bLineSpacingRule;
 		fmt->dyLineSpacing = dyLineSpacing;
 		fmt->dwMask = PFM_LINESPACING;
 	//	try
 	//	{
-		Message::Create(ctl->Handle, EM_SETPARAFORMAT, IntPtr(1), IntPtr(fmt));
+		Message::Create(ctl->Handle, EM_SETPARAFORMAT, IntPtr(0), IntPtr(fmt));
 		//ctl->hand
 	//	}
 	//	catch
@@ -90,7 +248,7 @@ namespace CLRnotepad {
 	//	}
 		
 	};
-
+*/
 	public ref class MyWindow : public System::Windows::Forms::Form
 	{
 /*
@@ -472,8 +630,9 @@ private: System::Void 新建NToolStripMenuItem_Click(System::Object^  sender, Syst
 }
 private: System::Void wtfToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 	//richTextBox1->SelectionCharOffset = -1 * 10;//(Convert::ToInt32(R223.Txt_Space_Before.Text) * 100);
-	SetLineSpace(richTextBox1, 40);
+	//	SetLineSpace(richTextBox1, 40);
 	//	richTextBox1->LineHeight = 100;
+	Kerning(richTextBox1, 100);
 }
 private: System::Void 文件FToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 }
