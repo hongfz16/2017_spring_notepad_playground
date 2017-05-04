@@ -53,8 +53,8 @@ namespace CLRnotepad {
 	#else
 		typedef char TCHAR;
 	#endif
-
-	typedef struct _paraformat {
+/*
+	typedef ref struct _paraformat {
 		UINT  cbSize;
 		DWORD dwMask;
 		WORD  wNumbering;
@@ -80,10 +80,11 @@ namespace CLRnotepad {
 		WORD  wBorderWidth;
 		WORD  wBorders;
 	} PARAFORMAT2;
-
+*/
 //	const int LF_FACESIZE = 10;
 
-	typedef struct _charformat2 {
+	[StructLayout(LayoutKind::Sequential)]
+	typedef ref struct _charformat2 {
 		UINT     cbSize;
 		DWORD    dwMask;
 		DWORD    dwEffects;
@@ -92,7 +93,8 @@ namespace CLRnotepad {
 		COLORREF crTextColor;
 		BYTE     bCharSet;
 		BYTE     bPitchAndFamily;
-		TCHAR    szFaceName[LF_FACESIZE];
+		[MarshalAs(UnmanagedType::ByValArray, SizeConst = 32)]
+		array<TCHAR> ^ szFaceName;//[LF_FACESIZE];
 		WORD     wWeight;
 		SHORT    sSpacing;
 		COLORREF crBackColor;
@@ -155,22 +157,6 @@ namespace CLRnotepad {
 	const UInt32 CFM_SUBSCRIPT = (CFE_SUBSCRIPT | CFE_SUPERSCRIPT);
 	const UInt32 CFM_SUPERSCRIPT = CFM_SUBSCRIPT;
 
-	// CHARFORMAT "ALL" masks
-/*
-	const UInt32 CFM_EFFECTS = (CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE | CFM_COLOR |
-		CFM_STRIKEOUT | CFE_PROTECTED | CFM_LINK);
-	const UInt32 CFM_ALL = (CFM_EFFECTS | CFM_SIZE | CFM_FACE | CFM_OFFSET | CFM_CHARSET);
-
-	const UInt32 CFM_EFFECTS2 = (CFM_EFFECTS | CFM_DISABLED | CFM_SMALLCAPS | CFM_ALLCAPS
-		| CFM_HIDDEN | CFM_OUTLINE | CFM_SHADOW | CFM_EMBOSS
-		| CFM_IMPRINT | CFM_DISABLED | CFM_REVISED
-		| CFM_SUBSCRIPT | CFM_SUPERSCRIPT | CFM_BACKCOLOR);
-*/
-/*
-	const UInt32 CFM_ALL2 = (CFM_ALL | CFM_EFFECTS2 | CFM_BACKCOLOR | CFM_LCID
-		| CFM_UNDERLINETYPE | CFM_WEIGHT | CFM_REVAUTHOR
-		| CFM_SPACING | CFM_KERNING | CFM_STYLE | CFM_ANIMATION);
-*/
 	//------------------------------------------------------------
 
 
@@ -200,6 +186,23 @@ namespace CLRnotepad {
 	const UInt32 CFE_AUTOBACKCOLOR = CFM_BACKCOLOR;
 	//-------------------------------------------------------
 
+	// CHARFORMAT "ALL" masks
+
+	const UInt32 CFM_EFFECTS = (CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE | CFM_COLOR |
+		CFM_STRIKEOUT | CFE_PROTECTED | CFM_LINK);
+	const UInt32 CFM_ALL = (CFM_EFFECTS | CFM_SIZE | CFM_FACE | CFM_OFFSET | CFM_CHARSET);
+
+	const UInt32 CFM_EFFECTS2 = (CFM_EFFECTS | CFM_DISABLED | CFM_SMALLCAPS | CFM_ALLCAPS
+		| CFM_HIDDEN | CFM_OUTLINE | CFM_SHADOW | CFM_EMBOSS
+		| CFM_IMPRINT | CFM_DISABLED | CFM_REVISED
+		| CFM_SUBSCRIPT | CFM_SUPERSCRIPT | CFM_BACKCOLOR);
+
+
+	const UInt32 CFM_ALL2 = (CFM_ALL | CFM_EFFECTS2 | CFM_BACKCOLOR | CFM_LCID
+		| CFM_UNDERLINETYPE | CFM_WEIGHT | CFM_REVAUTHOR
+		| CFM_SPACING | CFM_KERNING | CFM_STYLE | CFM_ANIMATION);
+
+
 	
 //	[DllImport("user32", CharSet = CharSet::Auto)]
 	//[DllImport("user32.dll", EntryPoint = "SendMessage", CharSet = CharSet::Auto)]
@@ -214,21 +217,93 @@ namespace CLRnotepad {
 
 	[DllImport("user32.dll", CharSet = CharSet::Auto)]
 	//[DllImport("user32.dll", CallingConvention = CallingConvention::StdCall)];
-	extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam,CHARFORMAT2* lParam);
+	extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam,CHARFORMAT2^ lParam);
 
 
 	void Kerning(RichTextBox^ ctl,int kerning)
 	{
-		CHARFORMAT2* fmt = new CHARFORMAT2();
-		fmt->cbSize = sizeof(CHARFORMAT2);
+		CHARFORMAT2^ fmt = gcnew CHARFORMAT2();
+		fmt->cbSize = System::Runtime::InteropServices::Marshal::SizeOf(fmt);//sizeof(CHARFORMAT2);
 		fmt->sSpacing = kerning;
 		fmt->wKerning = kerning;
+		fmt->wWeight = 100;
+		fmt->yOffset = 100;
 		//fmt->dwMask = CFM_SPACING;
-		fmt->dwMask = CFM_SPACING | CFM_KERNING | CFM_BOLD | CFM_ITALIC;
+		fmt->dwMask = CFM_OFFSET | CFM_WEIGHT | CFM_SPACING | CFM_KERNING | CFM_BOLD | CFM_ITALIC;
 		fmt->dwEffects = ~0;//CFE_BOLD;
 		//Message::Create(ctl->Handle, EM_SETCHARFORMAT ,IntPtr((int)SCF_SELECTION),IntPtr(fmt));
 		SendMessage(ctl->Handle, EM_SETCHARFORMAT, SCF_SELECTION, fmt);
 	}
+
+
+
+
+//	const int WM_USER = 0x0400;
+	const int EM_GETPARAFORMAT = WM_USER + 61;
+	const int EM_SETPARAFORMAT = WM_USER + 71;
+	const long MAX_TAB_STOPS = 32;
+	//const unsigned int PFM_LINESPACING = 0x00000100;
+	[StructLayout(LayoutKind::Sequential)]
+	ref struct PARAFORMAT2
+	{
+		int cbSize;
+		//unsigned int dwMask;
+		DWORD dwMask;
+		short wNumbering;
+		short wReserved;
+		int dxStartIndent;
+		int dxRightIndent;
+		int dxOffset;
+		short wAlignment;
+		short cTabCount;
+		[MarshalAs(UnmanagedType::ByValArray, SizeConst = 32)]
+		array<int>^  rgxTabs;
+		int dySpaceBefore;
+		int dySpaceAfter;
+		int dyLineSpacing;
+		short sStyle;
+		Byte bLineSpacingRule;
+		Byte bOutlineLevel;
+		short wShadingWeight;
+		short wShadingStyle;
+		short wNumberingStart;
+		short wNumberingStyle;
+		short wNumberingTab;
+		short wBorderSpace;
+		short wBorderWidth;
+		short wBorders;
+	};
+
+	[DllImport("user32.dll", CharSet = CharSet::Auto)]
+	//[DllImport("user32.dll", CallingConvention = CallingConvention::StdCall)];
+	extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, PARAFORMAT2^ lParam);
+
+	/// <summary>
+	/// 设置行距
+	/// </summary>
+	/// <param name="ctl">控件</param>
+	/// <param name="dyLineSpacing">间距</param>
+	void SetLineSpace(RichTextBox^ ctl, int dyLineSpacing)
+	{
+		PARAFORMAT2^ fmt = gcnew PARAFORMAT2();
+		fmt->cbSize = System::Runtime::InteropServices::Marshal::SizeOf(fmt);
+		fmt->bLineSpacingRule = 4;// bLineSpacingRule;
+		fmt->dyLineSpacing = dyLineSpacing;
+		fmt->dxOffset = 100;
+		fmt->dwMask = ~0;//PFM_LINESPACING;
+		SendMessage(ctl->Handle, EM_SETPARAFORMAT, 0, fmt);
+	}
+		/*
+		try
+		{
+		//SendMessage(new HandleRef(ctl, ctl.Handle), EM_SETPARAFORMAT, 0, ref fmt);
+		}
+		catch
+		{
+
+		}
+
+		}
 /*
 	static void SetLineSpace(RichTextBox^ ctl, int dyLineSpacing)
 	{
@@ -632,7 +707,8 @@ private: System::Void wtfToolStripMenuItem_Click(System::Object^  sender, System
 	//richTextBox1->SelectionCharOffset = -1 * 10;//(Convert::ToInt32(R223.Txt_Space_Before.Text) * 100);
 	//	SetLineSpace(richTextBox1, 40);
 	//	richTextBox1->LineHeight = 100;
-	Kerning(richTextBox1, 100);
+	//Kerning(richTextBox1, 100);
+	SetLineSpace(richTextBox1, 4000);
 }
 private: System::Void 文件FToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 }
@@ -645,7 +721,8 @@ private: System::Void letterSpacingToolStripMenuItem_Click(System::Object^  send
 
 }
 private: System::Void paddingToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-	this->richTextBox1->Margin = System::Windows::Forms::Padding(40,4,40,4);
+	//this->richTextBox1->Margin = System::Windows::Forms::Padding(40,4,40,4);
+	Kerning(richTextBox1, 100);
 }
 };
 }
